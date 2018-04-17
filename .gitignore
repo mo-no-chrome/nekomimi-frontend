@@ -1,0 +1,15 @@
+# OS
+Thumbs.db
+.DS_Store
+
+# Node packages.
+node_modules/
+
+# Coverage
+coverage/
+
+# Dist files.
+dist/
+
+# Logs
+*.log
