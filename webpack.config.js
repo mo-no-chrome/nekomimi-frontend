@@ -1,6 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const src = path.join(__dirname, 'src');
 const dist = path.join(__dirname, 'dist');
@@ -28,6 +29,22 @@ module.exports = {
         test: /\.(js|jsx)$/, // ルールを適用するファイルの正規表現
         exclude: /node_modules/, // node_modules以下のファイルには適用しないようにします
         loader: 'babel-loader' // 使用するloader
+      },
+      {
+        test: /\.css$/,
+        exclude: /node_modules/,
+        // loaderを複数使用する場合はuseを使う
+        use: [
+          MiniCssExtractPlugin.loader,
+          {
+            loader: 'css-loader',
+            options: {
+              modules: true,
+              localIdentName: '[name]__[local]--[hash:base64:5]'
+            }
+          },
+          'postcss-loader'
+        ]
       }
     ]
   },
@@ -40,6 +57,9 @@ module.exports = {
     new webpack.HotModuleReplacementPlugin(), // hot-reloadを有効にするプラグイン
     new HtmlWebpackPlugin({
       template: path.resolve(src, 'html/index.html')
-    }) // HtmlWebpackPlugin
+    }),
+    new MiniCssExtractPlugin({
+      filename: 'app.css'
+    })
   ]
 };
